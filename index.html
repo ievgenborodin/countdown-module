@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <link rel="stylesheet" href="../livebrush2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="countdown.css">
+    <script src="countdown.js"></script>
+</head>
+<body>
+<!-- ... sample html ... -->
+  <div id="myDiv"> 
+  </div>
+    
+<script>
+/* ... script ... */  
+  var countdown = new Countdown({
+    wrapId: 'myDiv',
+    seconds: 71,
+    callback: callback
+  });
+  
+  function callback(){
+    console.log("done");
+  };
+</script>    
+</body>
+</html>
