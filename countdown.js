@@ -1,5 +1,5 @@
 var Countdown = function(cfg){
-  var wrap, wrapId, seconds, callback,
+  var wrap, wrapId, seconds, callback, ratio,
       mes, digits = [
       ["a", "b", "c", "d", "e", "f", "x", "x"],
       ["b", "c", "x", "x", "x", "x", "x", "x"],
@@ -22,9 +22,10 @@ var Countdown = function(cfg){
   wrap = document.getElementById(wrapId);
   if (wrap) {
     initHtml();
+    setModuleSize();
     initWrapStyles();
+    setPartSize();
     evalTime();
-    setSize();
     sendDigits("seconds", currSeconds+'');
     sendDigits("minutes", currMinutes+'');
     sendDigits("hours", hours+'');
@@ -40,7 +41,7 @@ var Countdown = function(cfg){
   }
   
   /*..... functions .......*/
-  /* init params [wrapId, seconds]-padding */
+  /* init params [wrapId, seconds, callback, ratio] */
   function initParams(cfg){
     if (arguments.length > 1 || typeof(arguments[0]) !== "object"){
      wrapId = arguments[0];
@@ -50,13 +51,14 @@ var Countdown = function(cfg){
       wrapId = cfg.wrapId; 
       seconds = cfg.seconds || 10;
       callback = cfg.callback || undefined;
+      ratio = cfg.ratio || 2.9;
     }
   };
   
   function initHtml(){
     var i, counterDigit, partHtml;
     partHtml = '<div class="counter-part"><div class="counter-part-inner"></div></div>';
-    wrap.innerHTML = '<div class="countdown-wrap"><div class="countdown"><div class="counter-digits-block"><div class="counter-high-hours"><div class="counter-digit"></div></div><div class="counter-low-hours"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-minutes"><div class="counter-digit"></div></div><div class="counter-low-minutes"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-seconds"><div class="counter-digit"></div></div><div class="counter-low-seconds"><div class="counter-digit"></div></div></div></div></div>';
+    wrap.innerHTML = '<div class="countdown"><div class="counter-digits-block"><div class="counter-high-hours"><div class="counter-digit"></div></div><div class="counter-low-hours"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-minutes"><div class="counter-digit"></div></div><div class="counter-low-minutes"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-seconds"><div class="counter-digit"></div></div><div class="counter-low-seconds"><div class="counter-digit"></div></div></div></div>';
     counterDigit = document.getElementsByClassName('counter-digit');  
     for(i=0; i<7; i++) 
       partHtml += partHtml;
@@ -73,15 +75,30 @@ var Countdown = function(cfg){
     tmpSeconds = time.getSeconds();
   };
   
-  function setSize(){
-    var size = getSize();
+  function setModuleSize(){
+    var wrapBB, w, h, countdownBlock;
+    wrapBB = wrap.getBoundingClientRect();
+    w = wrapBB.width;
+    if (w / ratio > wrapBB.height){
+      h = wrapBB.height;
+      w = h * ratio;
+    } else {
+      h = w / ratio;
+    }
+    countdownBlock = document.getElementsByClassName('countdown')[0];
+    countdownBlock.style.width = w + 'px';
+    countdownBlock.style.height = h + 'px'; 
+  };
+  
+  function setPartSize(){
+    var size = getDigitSize();    
     horWidth = size.width;
     horHeight = size.height * 0.1;
     vertWidth = size.height * 0.5;  
     vertHeight = size.height * 0.1;
   };
   
-  function getSize(){
+  function getDigitSize(){
     var part = document.getElementsByClassName('counter-digit')[0],
         bb = part.getBoundingClientRect();
     return{
