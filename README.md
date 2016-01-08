@@ -21,3 +21,6 @@ var countdown = new Countdown({
 ### Preview
 ![Preview image](/preview.jpg)
  
+### Live preview
+http://ievgenborodin.com/
+* in module section
