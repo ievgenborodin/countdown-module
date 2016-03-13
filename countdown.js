@@ -14,22 +14,18 @@ var Countdown = function(cfg){
     ],
     loop, time, tmpSeconds, hours, minutes, 
     currSeconds, currMinutes,
-    horWidth, vertWidth, horHeight, vertHeight;
+    horWidth, vertWidth, horHeight, vertHeight,
+    autosize;
   
   /*..... auto init ......*/
   initParams(cfg);
   
   wrap = document.getElementById(wrapId);
   if (wrap) {
+    wrap.style.position = "relative";
     initHtml();
     setModuleSize();
-    initWrapStyles();
-    setPartSize();
-    evalTime();
-    sendDigits("seconds", currSeconds+'');
-    sendDigits("minutes", currMinutes+'');
-    sendDigits("hours", hours+'');
-    setLoop();
+    startTime();
   } else if (!wrap){
     mes = "Error. No such element found.";
     alert(mes);
@@ -51,14 +47,22 @@ var Countdown = function(cfg){
       wrapId = cfg.wrapId; 
       seconds = cfg.seconds || 10;
       callback = cfg.callback || undefined;
-      ratio = cfg.ratio || 2.9;
+      ratio = cfg.ratio;
     }
+  };
+  
+  function startTime(){
+    evalTime();
+    sendDigits("seconds", currSeconds+'');
+    sendDigits("minutes", currMinutes+'');
+    sendDigits("hours", hours+'');
+    setLoop();
   };
   
   function initHtml(){
     var i, counterDigit, partHtml;
     partHtml = '<div class="counter-part"><div class="counter-part-inner"></div></div>';
-    wrap.innerHTML = '<div class="countdown"><div class="counter-digits-block"><div class="counter-high-hours"><div class="counter-digit"></div></div><div class="counter-low-hours"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-minutes"><div class="counter-digit"></div></div><div class="counter-low-minutes"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-high-seconds"><div class="counter-digit"></div></div><div class="counter-low-seconds"><div class="counter-digit"></div></div></div></div>';
+    wrap.innerHTML = '<div class="countdown"><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-hours"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-hours"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-minutes"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-minutes"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-seconds"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-seconds"><div class="counter-digit"></div></div></div></div>';
     counterDigit = document.getElementsByClassName('counter-digit');  
     for(i=0; i<7; i++) 
       partHtml += partHtml;
@@ -74,39 +78,78 @@ var Countdown = function(cfg){
     time = new Date();
     tmpSeconds = time.getSeconds();
   };
-  
+
   function setModuleSize(){
-    var wrapBB, w, h, countdownBlock;
+    /* find wrapper size , set if necessary ratio , set proportions */
+    var wrapBB, w, h, countdownBlock, digitsBlock, dotsBlock, digitWrap, wpart, wleftover, hpart, hleftover,
+        wlength, hlength, wpartial, hpartial, wpadding, hpadding;
+
     wrapBB = wrap.getBoundingClientRect();
     w = wrapBB.width;
-    if (w / ratio > wrapBB.height){
-      h = wrapBB.height;
-      w = h * ratio;
-    } else {
-      h = w / ratio;
-    }
+    h = wrapBB.height;
+
+    /* w */
+    wleftover = w % 33;
+    wpart = (w - wleftover) / 33;
+    wrap.style.paddingLeft = parseInt(wleftover/2) + 'px';
+
+    digitsBlock = document.getElementsByClassName('counter-digits-block');
+    dotsBlock = document.getElementsByClassName('counter-dots-block');
+    digitWrap = document.getElementsByClassName('counter-digit-wrap');
+    altArrStyleProp(digitsBlock, 'width', (wpart*9) + 'px');
+    altArrStyleProp(dotsBlock, 'width', (wpart*3) + 'px');
+    altArrStyleProp(digitWrap, 'width', (wpart*4) + 'px');
+
     countdownBlock = document.getElementsByClassName('countdown')[0];
-    countdownBlock.style.width = w + 'px';
-    countdownBlock.style.height = h + 'px'; 
-  };
-  
-  function setPartSize(){
-    var size = getDigitSize();    
-    horWidth = size.width;
-    horHeight = size.height * 0.1;
-    vertWidth = size.height * 0.5;  
-    vertHeight = size.height * 0.1;
-  };
-  
-  function getDigitSize(){
-    var part = document.getElementsByClassName('counter-digit')[0],
-        bb = part.getBoundingClientRect();
-    return{
-      width: bb.width,
-      height: bb.height
+    countdownBlock.style.width = (w - wleftover) + 'px';
+
+    wlength = (wpart*4);
+
+    /* h */
+    autosize = (ratio || !wrapBB.height) ? false : true;
+    if (autosize){
+      hleftover = h % 13;
+      hpart = (h - hleftover) / 13;
+      //wrap.style.height = (hpart*13) + 'px';
+      wrap.style.paddingTop = parseInt(hleftover/2) + 'px';
+    } else {
+      if (!ratio) ratio = 3;
+      h = wlength * ratio;
+      h += h % 13;
+      hpart = h / 13;
+      wrap.style.height = h + 'px';
     }
-  };  
+
+    hlength = (hpart*6);
+
+    hpartial = (hlength/2 - wpart/2);
+    wpartial = (wlength/2 - hpart/2);
+    wpadding = parseInt(wlength*.1);
+    hpadding = parseInt(hlength*.1);
+
+    var moreStyles = document.createElement('style');
+    moreStyles.type = 'text/css';
+
+    var html = '.counter-part{  } ' +
+    '.part-b, .part-c, .part-e, .part-f { height: '+ wpart +'px;  width:'+ hlength +'px; }' +
+    '.part-a, .part-d, .part-g          { height: '+ hpart +'px;  width:'+ wlength +'px; padding-left:'+ wpadding +'px; padding-right:'+ wpadding +'px; }' +
+    '.part-b {  transform: translate(' + (wlength/2 + wpart - hpartial)  + 'px, '+ hpartial +'px) rotate(90deg); padding-left:'+ hpadding +'px; }' + 
+    '.part-c {  transform: translate(' + (wlength/2 + wpart - hpartial) + 'px, '+ (hpartial + hlength + hpart) +'px) rotate(90deg); padding-right:'+ hpadding+'px; }' +
+    '.part-d {  transform: translate(0px, ' + (hlength*2) + 'px) rotate(0deg); }' +
+    '.part-e {  transform: translate(-' + hpartial + 'px, '+ (hpartial + hlength + hpart) +'px) rotate(90deg); padding-right:'+ hpadding +'px; }' +
+    '.part-f {  transform: translate(-' + hpartial + 'px, '+ hpartial +'px) rotate(90deg); padding-left:'+ hpadding +'px; }' +
+    '.part-g {  transform: translate(0px, '+ (hlength) +'px) rotate(0deg); }';
+
+    //console.log(w, digits);
+    moreStyles.innerHTML = html;
+    document.getElementsByTagName('head')[0].appendChild(moreStyles);
+  };
   
+  function altArrStyleProp(arr, prop, value){
+    for (var i=0; i<arr.length; i++) 
+      arr[i].style[prop] = value;
+  };
+
   function setLoop(){
     loop = setInterval(function(){
     /* update time */
@@ -158,29 +201,15 @@ var Countdown = function(cfg){
           c = children[i];
           if (c.classList[1])
             c.classList.remove(c.classList[1]);
-          if (arr[i]!=="x"){
-            switch (arr[i]){
-              case 'a':
-              case 'd':
-              case 'g':
-                c.style.width = horWidth + 'px';
-                c.style.height = horHeight + 'px';
-                break;
-              default:
-                c.style.width = vertWidth + 'px';
-                c.style.height = vertHeight + 'px';
-            }
+          if (arr[i]!=="x")
             c.classList.add("part-" + arr[i]);
-          }
         }
       };
   
-  function initWrapStyles(){
-    wrap.style.position = "relative";
-  };
-  
   /*....... methods ........*/
-  this.reset = function(props){
-  
+  this.reset = function(secs){
+    clearInterval(loop);
+    seconds = secs;
+    startTime();
   };
 };

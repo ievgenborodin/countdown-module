@@ -8,31 +8,28 @@
   position: relative;    
   width: 100%;
   height: 100%;
-  margin: auto;
 }
 .counter-digits-block{
   position: relative;
-  width: 27%;
   height: 100%;
   float: left;
 }
-.counter-high-hours, .counter-low-hours,
-.counter-high-minutes, .counter-low-minutes,
-.counter-high-seconds, .counter-low-seconds{
+.counter-digit-wrap{
   position: relative;
-  width: 42.5%;
-  height: 90%;
-  margin: 5%;
+  height: 100%;
+}
+.counter-high-hours,
+.counter-high-minutes,
+.counter-high-seconds {
   float: left;
 }
 .counter-low-hours,
 .counter-low-minutes,  
 .counter-low-seconds{
-  margin-left: 0;
+  float: right;
 }
 .counter-dots-block{
   position: relative;
-  width: 9.5%;
   height: 100%;
   float: left;
 }
@@ -40,7 +37,6 @@
   position: relative;
   width: 100%;
   height: 50%;
-  padding-left: 5px;
 }
 .counter-digit{
   width: 100%;
@@ -67,38 +63,11 @@
 .counter-part{
   opacity: 0;
   position: absolute;
-  padding: 3px;
-  transform: rotate(0deg) translate(0%, 0%);
+  transform: rotate(0deg) translate(0px, 0px);
   transition: transform .5s, width .5s, height .5s;
 }
-.part-a, .part-b, .part-c, .part-d, .part-e, .part-f, .part-g{
-  opacity: 1;
-}
-.part-a, .part-d, .part-g{
-  padding-left: 9px;
-  padding-right: 9px;
-}
-.part-a{
-  transform: rotate(0deg) translate(0, 0);
-}
-.part-b{
-  transform: rotate(90deg) translate(40%, -90%);
-}
-.part-c{
-  transform: rotate(90deg) translate(140%, -90%);
-}
-.part-d{
-  transform: rotate(0deg) translate(0, 920%);
-}
-.part-e{
-  transform: rotate(90deg) translate(140%, 200%);
-}
-.part-f{
-  transform: rotate(90deg) translate(40%, 200%);
-}
-.part-g{
-  transform: rotate(0deg) translate(0, 450%);
-}
+.part-a, .part-b, .part-c, .part-d, .part-e, .part-f, .part-g{ opacity: 1; }
+
 .counter-part-inner{
   width: 100%;
   height: 100%;

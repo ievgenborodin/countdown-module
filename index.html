@@ -5,8 +5,10 @@
     <title>countdown test</title>
     <link rel="stylesheet" href="../livebrush2/css/bootstrap.min.css">
     <style>
+			body { padding-top: 1em;}
       #myDiv{
-        width: 400px;
+        width: 60%;
+				margin-left: 20%;
         height: 200px;
       }
       
@@ -24,7 +26,8 @@
   var countdown = new Countdown({
     wrapId: 'myDiv',
     seconds: 71,
-    callback: callback
+    callback: callback,
+		ratio: 3
   });
   
   function callback(){
