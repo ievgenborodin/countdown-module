@@ -15,10 +15,20 @@ var Countdown = function(cfg){
     loop, time, tmpSeconds, hours, minutes, 
     currSeconds, currMinutes,
     horWidth, vertWidth, horHeight, vertHeight,
-    autosize;
+    autosize, stylesHtml, moreStyles;
   
+  this.updateSize = setModuleSize;
+
+  this.updateRatio = function(r){
+    ratio = r;
+    setModuleSize();
+  };
+
   /*..... auto init ......*/
   initParams(cfg);
+  moreStyles = document.createElement('style');
+  moreStyles.type = 'text/css';
+  document.getElementsByTagName('head')[0].appendChild(moreStyles);
   
   wrap = document.getElementById(wrapId);
   if (wrap) {
@@ -35,8 +45,7 @@ var Countdown = function(cfg){
     alert(mes);
     return mes;
   }
-  
-  /*..... functions .......*/
+
   /* init params [wrapId, seconds, callback, ratio] */
   function initParams(cfg){
     if (arguments.length > 1 || typeof(arguments[0]) !== "object"){
@@ -80,7 +89,6 @@ var Countdown = function(cfg){
   };
 
   function setModuleSize(){
-    /* find wrapper size , set if necessary ratio , set proportions */
     var wrapBB, w, h, countdownBlock, digitsBlock, dotsBlock, digitWrap, wpart, wleftover, hpart, hleftover,
         wlength, hlength, wpartial, hpartial, wpadding, hpadding;
 
@@ -109,40 +117,39 @@ var Countdown = function(cfg){
     autosize = (ratio || !wrapBB.height) ? false : true;
     if (autosize){
       hleftover = h % 13;
-      hpart = (h - hleftover) / 13;
-      //wrap.style.height = (hpart*13) + 'px';
+      hpart = (h - hleftover) / 13; 
       wrap.style.paddingTop = parseInt(hleftover/2) + 'px';
+      hlength = (hpart*6);
     } else {
-      if (!ratio) ratio = 3;
-      h = wlength * ratio;
-      h += h % 13;
-      hpart = h / 13;
+      if (!ratio) {
+        hpart = wpart;
+        h = hpart * 9;
+        hlength = (hpart*4);
+      } else {
+        h = wlength * ratio;
+        h += h % 13;
+        hpart = h / 13;
+        hlength = (hpart*6);
+      }
       wrap.style.height = h + 'px';
     }
-
-    hlength = (hpart*6);
 
     hpartial = (hlength/2 - wpart/2);
     wpartial = (wlength/2 - hpart/2);
     wpadding = parseInt(wlength*.1);
     hpadding = parseInt(hlength*.1);
-
-    var moreStyles = document.createElement('style');
-    moreStyles.type = 'text/css';
-
-    var html = '.counter-part{  } ' +
-    '.part-b, .part-c, .part-e, .part-f { height: '+ wpart +'px;  width:'+ hlength +'px; }' +
-    '.part-a, .part-d, .part-g          { height: '+ hpart +'px;  width:'+ wlength +'px; padding-left:'+ wpadding +'px; padding-right:'+ wpadding +'px; }' +
+    
+    /* update classes */
+    stylesHtml = '.part-b, .part-c, .part-e, .part-f { height: '+ wpart +'px;  width:'+ hlength +'px; }' +
+    '.part-a, .part-d, .part-g  { height: '+ hpart +'px;  width:'+ wlength +'px; padding-left:'+ wpadding +'px; padding-right:'+ wpadding +'px; }' +
     '.part-b {  transform: translate(' + (wlength/2 + wpart - hpartial)  + 'px, '+ hpartial +'px) rotate(90deg); padding-left:'+ hpadding +'px; }' + 
     '.part-c {  transform: translate(' + (wlength/2 + wpart - hpartial) + 'px, '+ (hpartial + hlength + hpart) +'px) rotate(90deg); padding-right:'+ hpadding+'px; }' +
     '.part-d {  transform: translate(0px, ' + (hlength*2) + 'px) rotate(0deg); }' +
     '.part-e {  transform: translate(-' + hpartial + 'px, '+ (hpartial + hlength + hpart) +'px) rotate(90deg); padding-right:'+ hpadding +'px; }' +
     '.part-f {  transform: translate(-' + hpartial + 'px, '+ hpartial +'px) rotate(90deg); padding-left:'+ hpadding +'px; }' +
     '.part-g {  transform: translate(0px, '+ (hlength) +'px) rotate(0deg); }';
+    moreStyles.innerHTML = stylesHtml;
 
-    //console.log(w, digits);
-    moreStyles.innerHTML = html;
-    document.getElementsByTagName('head')[0].appendChild(moreStyles);
   };
   
   function altArrStyleProp(arr, prop, value){
