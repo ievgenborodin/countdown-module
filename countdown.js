@@ -58,8 +58,24 @@ var Countdown = function(cfg){
       callback = cfg.callback || undefined;
       ratio = cfg.ratio;
     }
+
+    if (cfg.date)
+      seconds = dateToSeconds(cfg.date);
   };
   
+  function dateToSeconds(date)
+  {
+    var now, till, 
+        d = date.split('-');
+
+    now = new Date();
+    till = new Date(d[0],d[1] - 1, d[2], 0, 0, 0);
+
+    rawSeconds = (till.getTime() - now.getTime()) / 1000;
+
+    return parseInt(rawSeconds);
+  }
+
   function startTime(){
     evalTime();
     sendDigits("seconds", currSeconds+'');
@@ -129,15 +145,15 @@ var Countdown = function(cfg){
     h = wrapBB.height;
 
     /* w */
-    wleftover = w % 45;
-    wpart = (w - wleftover) / 45;
+    wleftover = w % 63;
+    wpart = (w - wleftover) / 63;
     wrap.style.paddingLeft = parseInt(wleftover/2) + 'px';
 
     digitsBlock = document.getElementsByClassName('counter-digits-block');
     dotsBlock = document.getElementsByClassName('counter-dots-block');
     digitWrap = document.getElementsByClassName('counter-digit-wrap');
     altArrStyleProp(digitsBlock, 'width', (wpart*9) + 'px');
-    altArrStyleProp(dotsBlock, 'width', (wpart*3) + 'px');
+    altArrStyleProp(dotsBlock, 'width', (wpart*8) + 'px');
     altArrStyleProp(digitWrap, 'width', (wpart*4) + 'px');
 
     countdownBlock = document.getElementsByClassName('countdown')[0];
@@ -196,11 +212,11 @@ var Countdown = function(cfg){
     
     /* trigger if seconds change */
     if(time.getSeconds() !== tmpSeconds){
-      if (currSeconds === 0){
+      if (currSeconds == 0){
         if (days + currHours + currMinutes){
           currSeconds = 59;
           sendDigits("seconds", currSeconds+'');
-          if (currMinutes > 0) { 
+          if (currMinutes > 0) {  
             currMinutes--; 
             sendDigits("minutes", currMinutes+'');
           } else if (currHours > 0) {
