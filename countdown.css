@@ -18,11 +18,13 @@
   position: relative;
   height: 100%;
 }
+.counter-high-days,
 .counter-high-hours,
 .counter-high-minutes,
 .counter-high-seconds {
   float: left;
 }
+.counter-low-days,
 .counter-low-hours,
 .counter-low-minutes,  
 .counter-low-seconds{

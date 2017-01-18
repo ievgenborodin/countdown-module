@@ -13,7 +13,7 @@ var Countdown = function(cfg){
       ["a", "b", "g", "f", "c", "d", "x", "x"]
     ],
     loop, time, tmpSeconds, hours, minutes, 
-    currSeconds, currMinutes,
+    currSeconds, currMinutes, currHours,
     horWidth, vertWidth, horHeight, vertHeight,
     autosize, stylesHtml, moreStyles;
   
@@ -64,26 +64,58 @@ var Countdown = function(cfg){
     evalTime();
     sendDigits("seconds", currSeconds+'');
     sendDigits("minutes", currMinutes+'');
-    sendDigits("hours", hours+'');
+    sendDigits("hours", currHours+'');
+    sendDigits("days", days+'');
     setLoop();
   };
   
   function initHtml(){
     var i, counterDigit, partHtml;
     partHtml = '<div class="counter-part"><div class="counter-part-inner"></div></div>';
-    wrap.innerHTML = '<div class="countdown"><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-hours"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-hours"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-minutes"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-minutes"><div class="counter-digit"></div></div></div><div class="counter-dots-block"><div class="counter-dot"><div class="counter-dot-high"></div></div><div class="counter-dot"><div class="counter-dot-low"></div></div></div><div class="counter-digits-block"><div class="counter-digit-wrap counter-high-seconds"><div class="counter-digit"></div></div><div class="counter-digit-wrap counter-low-seconds"><div class="counter-digit"></div></div></div></div>';
+    wrap.innerHTML = '<div class="countdown"> \
+      <div class="counter-digits-block"> \
+        <div class="counter-digit-wrap counter-high-days"><div class="counter-digit"></div></div> \
+        <div class="counter-digit-wrap counter-low-days"><div class="counter-digit"></div></div> \
+      </div> \
+      <div class="counter-dots-block"> \
+        <div class="counter-dot"><div class="counter-dot-high"></div></div> \
+        <div class="counter-dot"><div class="counter-dot-low"></div></div> \
+      </div> \
+      <div class="counter-digits-block"> \
+        <div class="counter-digit-wrap counter-high-hours"><div class="counter-digit"></div></div> \
+        <div class="counter-digit-wrap counter-low-hours"><div class="counter-digit"></div></div> \
+      </div> \
+      <div class="counter-dots-block"> \
+        <div class="counter-dot"><div class="counter-dot-high"></div></div> \
+        <div class="counter-dot"><div class="counter-dot-low"></div></div> \
+      </div> \
+      <div class="counter-digits-block"> \
+        <div class="counter-digit-wrap counter-high-minutes"><div class="counter-digit"></div></div> \
+        <div class="counter-digit-wrap counter-low-minutes"><div class="counter-digit"></div></div> \
+      </div> \
+      <div class="counter-dots-block"> \
+        <div class="counter-dot"><div class="counter-dot-high"></div></div> \
+        <div class="counter-dot"><div class="counter-dot-low"></div></div> \
+      </div> \
+      <div class="counter-digits-block"> \
+        <div class="counter-digit-wrap counter-high-seconds"><div class="counter-digit"></div></div> \
+        <div class="counter-digit-wrap counter-low-seconds"><div class="counter-digit"></div></div> \
+      </div> \
+    </div>';
     counterDigit = document.getElementsByClassName('counter-digit');  
     for(i=0; i<7; i++) 
       partHtml += partHtml;
-    for(i=0; i<6; i++) 
+    for(i=0; i<8; i++) 
       counterDigit[i].innerHTML = partHtml;
   };
   
   function evalTime(){  
+    days = parseInt(seconds / (3600 * 24));
     hours = parseInt(seconds / 3600);
     minutes = parseInt(seconds / 60);
     currSeconds = seconds % 60;
-    currMinutes = minutes % 60; 
+    currMinutes = minutes % 60;
+    currHours = hours % 24; 
     time = new Date();
     tmpSeconds = time.getSeconds();
   };
@@ -97,8 +129,8 @@ var Countdown = function(cfg){
     h = wrapBB.height;
 
     /* w */
-    wleftover = w % 33;
-    wpart = (w - wleftover) / 33;
+    wleftover = w % 45;
+    wpart = (w - wleftover) / 45;
     wrap.style.paddingLeft = parseInt(wleftover/2) + 'px';
 
     digitsBlock = document.getElementsByClassName('counter-digits-block');
@@ -165,15 +197,22 @@ var Countdown = function(cfg){
     /* trigger if seconds change */
     if(time.getSeconds() !== tmpSeconds){
       if (currSeconds === 0){
-        if (hours + currMinutes){
+        if (days + currHours + currMinutes){
           currSeconds = 59;
           sendDigits("seconds", currSeconds+'');
           if (currMinutes > 0) { 
             currMinutes--; 
             sendDigits("minutes", currMinutes+'');
+          } else if (currHours > 0) {
+            currHours--;
+            sendDigits("hours", currHours+'');
+            currMinutes = 59;
+            sendDigits("minutes", currMinutes+'');
           } else {
-            hours--;
-            sendDigits("hours", hours+'');
+            days--;
+            sendDigits("days", days+'');
+            currHours = 23;
+            sendDigits("hours", currHours+'');
             currMinutes = 59;
             sendDigits("minutes", currMinutes+'');
           }
