@@ -1,14 +1,17 @@
 ## Countdown module
 
-*Easy to use, uses css animation (doesn't require jquery)*
+### features
+* isolated blocks
+* react/es6 friends
 
 Use:
 
-* include: **countdown.js**, **countdown.css**
 * initialize with: 
 ```javascript
+import Countdown, { Seconds } from 'count-down';
+
+// init 
 var countdown = new Countdown({
-    wrapId: 'myDiv', // element[id] to hold the module
     seconds: 71,
     callback: callback
   });
@@ -16,6 +19,9 @@ var countdown = new Countdown({
   function callback(){
     console.log("done");
   };
+
+// render 
+<Seconds c={countdown} />
 ```
 
 ### Preview

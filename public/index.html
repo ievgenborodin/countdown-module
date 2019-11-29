@@ -30,33 +30,8 @@
     </style>
 </head>
 <body>
-<!-- ... sample html ... -->
-  <div class="days-wrap frame"><div id="countdown-days"></div></div>
-  <div id="countdown">
-    <div class="h-wrap frame"><div id="countdown-h"></div></div>
-    <div class="ms-wrap">
-        <div class="m-wrap frame"><div id="countdown-m"></div></div>
-        <div class="s-wrap frame"><div id="countdown-s"></div></div>    
-    </div>
-  </div>
-    
-<link rel="stylesheet" href="countdown.css">
-<script src="countdown.js"></script>
-<script>
-  // init 
-  window.countdown = new Countdown({
-    date: '2020-03-02',
-    callback: callback
-  });
-  countdown.render('countdown-days', 'days', 'background:#fff');
-  countdown.render('countdown-h', 'hours', 'background:#1370a0');
-  countdown.render('countdown-m', 'minutes', 'background:#9e489e');
-  countdown.render('countdown-s', 'seconds', 'background:#2dc378');
+    <div id="root"></div>
 
-  function callback(){
-    console.log("done");
-  };
-
-</script>    
+    <script src="app.js"></script>
 </body>
 </html>
