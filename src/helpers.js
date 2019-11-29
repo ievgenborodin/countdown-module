@@ -88,6 +88,7 @@ export const addDefaultStyles = () => {
         width: 100%;
         height: 100%;
         border-radius: 4px;
+        background: #c1c1c1;
       }
     `;
 

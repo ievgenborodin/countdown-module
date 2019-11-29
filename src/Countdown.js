@@ -3,6 +3,7 @@ import { addDigitsBlock } from './htmlHelpers';
 
 
 const Countdown = (cfg) => {
+    
     var digits = [
         ["a", "b", "c", "d", "e", "f", "x", "x"],
         ["b", "c", "x", "x", "x", "x", "x", "x"],
@@ -24,13 +25,9 @@ const Countdown = (cfg) => {
     
     var config = {};
 
-    var element = null;
-
     var seconds = 0;
 
     var callback = null;
-
-    var ratio = 2;
 
     addDefaultStyles(); 
 
@@ -44,17 +41,9 @@ const Countdown = (cfg) => {
      * param cfg: { element, seconds, callback, ratio }
      */
     const setParams = (cfg) => {
-        if (arguments.length > 1 || typeof(arguments[0]) !== "object"){
-            element = arguments[0];
-            seconds = arguments[1] || 10;
-            callback = arguments[2] || undefined;
-        } else {
-            element = cfg.element; 
-            seconds = cfg.seconds || 10;
-            callback = cfg.callback || undefined;
-            ratio = cfg.ratio;
-        }
-
+        seconds = cfg.seconds || 10;
+        callback = cfg.callback || undefined;
+        
         if (!callback)
             callback = function(){ return; }
 
@@ -171,13 +160,14 @@ const Countdown = (cfg) => {
         moreStyles.innerHTML = text;
     }
 
-    const updateBlock = (wrapId, style) => {
+    const updateBlock = (wrapId, style, ratio) => {
         if (!wrapId) return;
         //
         var wrapBB, w, h, countdownBlock, digitsBlock, dotsBlock, digitWrap, wpart, wleftover, hpart, hleftover,
             wlength, hlength, wpartial, hpartial, wpadding, hpadding;
         
         var wrap = document.getElementById(wrapId);
+        if (!wrap) return;
 
         styles[wrapId] = '';
     
@@ -247,7 +237,7 @@ const Countdown = (cfg) => {
 
 
     // init params
-    config = Object.assign(config, cfg);
+    config = {...config, ...cfg};
     setParams(config);
     startTime();      
 
@@ -262,7 +252,7 @@ const Countdown = (cfg) => {
         seconds = value;
         startTime();
         } else if (typeof value === 'string' && /\d{4}-\d{2}-\d{2}/.test(value)) {
-        config = Object.assign(config, {date: value});
+        config = {...config, date: value};
         clearInterval(loop);            
         setParams(config);
         startTime();
@@ -280,49 +270,30 @@ const Countdown = (cfg) => {
         startTime();
     };
 
-    const render = (type, style='') => {
-        const elementId = 'e-' + ~~(Math.random() * 10000);
-        const element = document.getElementById(elementId);
-        ids.push(elementId);
+    const render = ({id, type, css, ratio}) => {
+        if (!id || !type) return;
+        //const elementId = 'e-' + ~~(Math.random() * 10000);
+        //const element = document.createElement('div');
+        //element.id = elementId;
+        const element = document.getElementById(id);
+        ids.push(id);
         addDigitsBlock(element, type);
-        // fix size
-        updateBlock(elementId, style);   
+        updateBlock(
+            id, 
+            css || '', 
+            ratio || null
+        );   
         sendAll();
-        return element; 
     }
-    return this;
+
+    // return methods
+    return {
+        render,
+        start,
+        stop,
+        updateTime,
+        updateRatio
+    };
 }
 
 export default Countdown;
-
-
-export const Days = (props) => {
-    if (!props.c)
-        return null;
-
-    return props.c.render('days', props.styles)
-}
-
-
-export const Hours = (props) => {
-    if (!props.c)
-        return null;
-
-    return props.c.render('hours', props.styles)
-}
-
-
-export const Minutes = (props) => {
-    if (!props.c)
-        return null;
-
-    return props.c.render('minutes', props.styles)
-}
-
-
-export const Seconds = (props) => {
-    if (!props.c)
-        return null;
-
-    return props.c.render('seconds', props.styles)
-}
