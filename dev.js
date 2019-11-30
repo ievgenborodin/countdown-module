@@ -30,7 +30,7 @@ class ExampleApp extends Component {
     render() {
         return (
             <>
-                <div id="sample-2">
+                <div id="sample">
                     <div>
                         {/* days element */}
                         <div id="d"/>
