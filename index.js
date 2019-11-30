@@ -1,1 +1,1 @@
-export {default} from './dist/TemplateEditor'
+export {default} from './dist/Countdown'

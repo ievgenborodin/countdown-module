@@ -1,7 +1,7 @@
 {
-  "name": "count-down",
-  "version": "1.0.7",
-  "description": "Countdown module.",
+  "name": "anim-countdown",
+  "version": "1.0.2",
+  "description": "Animated countdown module",
   "main": "index.js",
   "scripts": {
     "prod": "NODE_ENV=production webpack",

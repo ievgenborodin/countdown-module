@@ -12,7 +12,7 @@ class ExampleApp extends Component {
         super();
         // init countdown
         window.countdown = new Countdown({
-            date: '2020-03-02',
+            date: '2020-02-22',
             callback: () => {
                 console.log("done");
             }
@@ -20,49 +20,34 @@ class ExampleApp extends Component {
     }
 
     componentDidMount() {
-        countdown.render({id: 'countdown-days', type: 'days', css: 'background:#fff' });
-        countdown.render({id: 'countdown-hours', type: 'hours', css: 'background:#1370a0' });
-        countdown.render({id: 'countdown-minutes', type: 'minutes', css: 'background:#9e489e' });
-        countdown.render({id: 'countdown-seconds', type: 'seconds', css: 'background:#2dc378' });
-        countdown.render({id: 'another-seconds', type: 'seconds', ratio: 2 });
+        countdown.render({ id: 'd', type: 'days',    color: '#fff', paddingRatioX: 1, paddingRatioY: 1 });
+        countdown.render({ id: 'h', type: 'hours',   color: '#fff', paddingRatioX: 1, paddingRatioY: 1 });
+        countdown.render({ id: 'm', type: 'minutes', color: '#fff', paddingRatioX: 1, paddingRatioY: 1 });
+        countdown.render({ id: 's', type: 'seconds', color: '#fff', paddingRatioX: 1, paddingRatioY: 1 });
     }
 
 
     render() {
         return (
             <>
-                {/* blocks could be separated */}
-                <div className="days-wrap frame">
-                    
-                    {/* days element */}
-                    <div id="countdown-days" />
-                
-                </div>
-
-                <div id="countdown">
-                    <div className="h-wrap frame">
-                        
+                <div id="sample-2">
+                    <div>
+                        {/* days element */}
+                        <div id="d"/>
+                    </div>
+                    <div>
                         {/* hours element */}
-                        <div id="countdown-hours" />
-                    
+                        <div id="h"/>
                     </div>
-                    <div className="ms-wrap">
-                        <div className="m-wrap frame">
-                            
-                            {/* minutes element */}
-                            <div id="countdown-minutes" />
-        
-                        </div>
-                        <div className="s-wrap frame">
-                            
-                            {/* seconds element */}
-                            <div id="countdown-seconds" />
-                        
-                        </div>    
+                    <div>
+                        {/* minutes element */}
+                        <div id="m"/>
+                    </div>
+                    <div>
+                        {/* seconds element */}
+                        <div id="s"/>
                     </div>
                 </div>
-
-                <div id="another-seconds" style={{width: '100px', height: '100px', marginTop: '20px' }}/>
             </>
         )
     }
@@ -74,7 +59,7 @@ class ExampleApp extends Component {
  *  
  */
 ReactDOM.render(
-    <ExampleApp />, 
+    <ExampleApp />,
     document.getElementById('root')
 )
 
