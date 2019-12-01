@@ -70,7 +70,7 @@ id          | string  | required  | id of the element
 
 Argument    | Type    | Status    | Description
 ----------- | ------- | --------- | -------------
-value       | string|number  | required  | number of seconds or date string [YYYY-MM-DD]
+value       | string or number  | required  | number of seconds or date string [YYYY-MM-DD]
 
   
 ### Preview
