@@ -22,11 +22,11 @@ module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
     app: [
-      './dev.js'
+      './sample-app/src'
     ]
   },
   output: {
-    path: path.resolve(__dirname, './public'),
+    path: path.resolve(__dirname, './sample-app'),
     filename: '[name].js'
   },
   module: {

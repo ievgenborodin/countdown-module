@@ -1,6 +1,6 @@
 {
   "name": "anim-countdown",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Animated countdown module",
   "main": "index.js",
   "scripts": {

@@ -12,7 +12,12 @@ body {
     background-size: cover;
 }
 
-#sample>div {
+.column {
+    display: flex;
+    flex-direction: row;
+}
+
+.column > div {
     margin: 20px;
     padding: 30px;
     width: 100px;
@@ -21,13 +26,18 @@ body {
     background: rgba(20, 20, 20, .5);
 }
 
+@media (max-width: 767px) {
+    .column { flex-direction: column; }
+    .column > div { width: 75px; height: 75px; padding: 20px 20px 30px; margin: 10px; }
+}
+
 #d, #h, #m, #s {
     width: 100%;
     height: 100%;
     position: relative;
 }
 
-#sample>div>div::after {
+.column>div>div::after {
     display: inline-block;
     position: absolute;
     left: 0;

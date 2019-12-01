@@ -4,14 +4,20 @@
 * animated time transition
 * isolated blocks
 * supports days,hours,minutes,seconds
-* inititialize with date or number of seconds
+* inititialize with date string or number of seconds
 * react/es6 friends
 
-Use:
+### Install
+
+```shell
+npm install anim-countdown
+```
+
+### Usage
 
 * initialize with: 
 ```javascript
-import Countdown, { Seconds } from 'count-down';
+import Countdown from 'anim-countdown';
 
 // init 
 var countdown = new Countdown({
@@ -35,14 +41,37 @@ countdown.render('seconds-holder-id', 'seconds');
   - `seconds` - integer, number of seconds
   - `callback` - callback function to trigger when finished
 
-### Render Options
-  - `id` - string, id of the element to hold digits block
-  - `type` - string, represends the type of the value needed to render (days|hours|minutes|seconds) 
-  - `color` - string, css color will apply to inner parts of digits
-  - `ratio` - number, use to set auth height based on with of the container 
-  - `paddingRatioX` - number, horizontal padding to digit parts 
-  - `paddingRatioY` - number, vertical padding to digit parts 
-  - `reduceHeightGap` - boolean, balance vertical gab between digit's parts 
 
+### Methods
+  - `.stop()` - stop countdown
+  - `.start()` - resume countdown
+  - `.start()` - resume countdown
+  - `.render(...args)` - generate digits block
+
+Argument    | Type    | Status    | Description
+----------- | ------- | --------- | -------------
+id          | string  | required  | id of the element to hold digits block
+type        | string  | required  | [days|hours|minutes|seconds]
+color       | string  | optional  | css color will apply to inner parts of digits
+ratio       | number  | optional  | set auto height based on width of the container
+paddingRatioX | number | optional | horizontal padding to digit parts
+paddingRatioY | number | optional | vertical padding to digit parts
+reduceHeightGap | boolean | optional | balance vertical gab between digit's parts
+
+  - `.redrawBlock(...args)` - re draw digits block (ex. use after resize)
+
+Argument    | Type    | Status    | Description
+----------- | ------- | --------- | -------------
+id          | string  | required  | id of the element
+
+  - `.redrawAll()` - re draw every digits block (ex. use after resize)
+
+  - `.updateTime(...args)` - reset time 
+
+Argument    | Type    | Status    | Description
+----------- | ------- | --------- | -------------
+value       | string|number  | required  | number of seconds or date string [YYYY-MM-DD]
+
+  
 ### Preview
 ![Preview image](/prev.jpg)
