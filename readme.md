@@ -14,8 +14,6 @@ npm install anim-countdown
 ```
 
 ### Usage
-
-* initialize with: 
 ```javascript
 import Countdown from 'anim-countdown';
 
